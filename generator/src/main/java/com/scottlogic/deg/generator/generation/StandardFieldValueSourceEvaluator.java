@@ -120,25 +120,28 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
-        if (stringRestrictions != null && (stringRestrictions.stringGenerator != null)) {
-            Set<Object> blacklist = getBlacklist(fieldSpec);
+        StringGenerator generator = getStringGenerator(fieldSpec.getStringRestrictions());
 
-            final StringGenerator generator;
-            if (blacklist.size() > 0) {
-                RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
-
-                generator = stringRestrictions.stringGenerator.intersect(blacklistGenerator);
-            } else {
-                generator = stringRestrictions.stringGenerator;
-            }
-
+        Set<Object> blacklist = getBlacklist(fieldSpec);
+        if (blacklist.isEmpty()) {
             return generator.asFieldValueSource();
-
-        } else {
-            // todo: move default interesting values into the string field value source
-            return CannedValuesFieldValueSource.of("Lorem Ipsum");
         }
+
+        RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+
+        return generator.intersect(blacklistGenerator).asFieldValueSource();
+    }
+
+    private StringGenerator getStringGenerator(StringRestrictions stringRestrictions) {
+        if (stringRestrictions == null || (stringRestrictions.stringGenerator == null)) {
+            return anyStringsAllowed();
+        }
+
+        return stringRestrictions.stringGenerator;
+    }
+
+    private RegexStringGenerator anyStringsAllowed() {
+        return new RegexStringGenerator(".{0,280}", true);
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
