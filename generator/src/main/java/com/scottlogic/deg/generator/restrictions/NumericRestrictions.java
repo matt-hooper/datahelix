@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
-public class NumericRestrictions {
+public class NumericRestrictions implements Matchable<Number>{
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;
@@ -31,11 +31,7 @@ public class NumericRestrictions {
         return o instanceof Number;
     }
 
-    public boolean match(Object o) {
-        if (!NumericRestrictions.isNumeric(o)) {
-            return false;
-        }
-
+    public boolean match(Number o) {
         BigDecimal n = new BigDecimal(o.toString());
 
         if(min != null){

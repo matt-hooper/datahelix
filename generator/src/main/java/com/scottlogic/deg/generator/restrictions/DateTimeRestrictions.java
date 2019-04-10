@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.restrictions;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions {
+public class DateTimeRestrictions implements Matchable<OffsetDateTime>{
     public DateTimeLimit min;
     public DateTimeLimit max;
 
@@ -11,13 +11,7 @@ public class DateTimeRestrictions {
         return o instanceof OffsetDateTime;
     }
 
-    public boolean match(Object o) {
-        if(!DateTimeRestrictions.isDateTime(o)){
-            return false;
-        }
-
-        OffsetDateTime d = (OffsetDateTime) o;
-
+    public boolean match(OffsetDateTime d) {
         if(min != null){
             if(d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
             {
