@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -52,15 +51,15 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             }
 
             if(merging.getStringRestrictions() != null){
-                filterStream = filterStream.filter(x -> !isString(x) || merging.getStringRestrictions().match((String) x));
+                filterStream = filterStream.filter(x -> !isString(x) || merging.getStringRestrictions().match(x));
             }
 
             if(merging.getNumericRestrictions() != null){
-                filterStream = filterStream.filter(x -> !isNumeric(x) || merging.getNumericRestrictions().match((Number) x));
+                filterStream = filterStream.filter(x -> !isNumeric(x) || merging.getNumericRestrictions().match(x));
             }
 
             if(merging.getDateTimeRestrictions() != null){
-                filterStream = filterStream.filter(x -> !isDateTime(x) || merging.getDateTimeRestrictions().match((OffsetDateTime) x));
+                filterStream = filterStream.filter(x -> !isDateTime(x) || merging.getDateTimeRestrictions().match(x));
             }
 
             Set<Object> whitelist = filterStream.collect(Collectors.toCollection(HashSet::new));
