@@ -7,30 +7,39 @@ public class SetRestrictions {
     private final Set<Object> whitelist;
     private final Set<Object> blacklist;
 
-    public Set<Object> getWhitelist() {
-        return this.whitelist;
-    }
-
-    public Set<Object> getBlacklist() {
-        return this.blacklist;
-    }
-
-    public SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
-        this.whitelist = whitelist;
-        this.blacklist = blacklist;
-    }
-
-    public boolean isEmpty(){
-        return ((this.whitelist == null || this.whitelist.isEmpty())
-            && (this.blacklist == null || this.blacklist.isEmpty()));
-    }
-
     public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
         return new SetRestrictions(whitelist, null);
     }
 
     public static SetRestrictions fromBlacklist(Set<Object> blacklist) {
         return new SetRestrictions(null, blacklist);
+    }
+
+    public Set<Object> getWhitelist() {
+        if (hasBlacklist()){
+            throw new UnsupportedOperationException("can't get a blacklist for a whitelist");
+        }
+        return whitelist;
+    }
+
+    public Set<Object> getBlacklist() {
+        if (hasWhitelist()){
+            throw new UnsupportedOperationException("can't get a whitelist for a blacklist");
+        }
+        return blacklist;
+    }
+
+    public boolean hasWhitelist() {
+        return blacklist == null;
+    }
+
+    public boolean hasBlacklist() {
+        return !hasWhitelist();
+    }
+
+    protected SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
+        this.whitelist = whitelist;
+        this.blacklist = blacklist;
     }
 
     @Override
@@ -52,6 +61,11 @@ public class SetRestrictions {
             "IN %s AND NOT IN %s",
             Objects.toString(whitelist, "-"),
             Objects.toString(blacklist, "-"));
+    }
+
+    private boolean isEmpty(){
+        return ((whitelist == null || whitelist.isEmpty())
+            && (blacklist == null || blacklist.isEmpty()));
     }
 
     @Override

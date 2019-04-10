@@ -33,8 +33,8 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
 
         // Filter the set to match any new restrictions
         if (setRestrictions != null &&
-            setRestrictions.getWhitelist() != null &&
-            !setRestrictions.getWhitelist().isEmpty()) {
+            setRestrictions.hasWhitelist() &&
+            setRestrictions.getWhitelist() != null) {
 
             Stream<?> filterStream = setRestrictions.getWhitelist().stream();
             TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
@@ -64,8 +64,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             }
 
             Set<Object> whitelist = filterStream.collect(Collectors.toCollection(HashSet::new));
-            SetRestrictions newSetRestrictions = new SetRestrictions(whitelist,
-                setRestrictions.getBlacklist());
+            SetRestrictions newSetRestrictions = SetRestrictions.fromWhitelist(whitelist);
 
             setRestrictions = newSetRestrictions;
         }

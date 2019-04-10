@@ -95,7 +95,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has set restrictions", countryFieldSpec.getSetRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Country fieldspec set restrictions have no blacklist",
-            countryFieldSpec.getSetRestrictions().getBlacklist(), anyOf(nullValue(), empty()));
+            countryFieldSpec.getSetRestrictions().hasBlacklist(), is(false));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
             countryFieldSpec.getSetRestrictions().getWhitelist(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",

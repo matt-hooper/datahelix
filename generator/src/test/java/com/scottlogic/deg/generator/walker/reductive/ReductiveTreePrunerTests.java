@@ -41,7 +41,7 @@ class ReductiveTreePrunerTests {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5, Collections.emptySet()));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -59,7 +59,7 @@ class ReductiveTreePrunerTests {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5, Collections.emptySet()));
-        FieldSpec inputFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -82,7 +82,7 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -105,7 +105,7 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -128,7 +128,7 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -154,7 +154,7 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("c"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -181,7 +181,7 @@ class ReductiveTreePrunerTests {
                 .build();
 
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -212,7 +212,7 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("contradictory"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -241,7 +241,7 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -271,7 +271,7 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -303,7 +303,7 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -336,7 +336,7 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -363,7 +363,7 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(SetRestrictions.fromWhitelist(inputWhitelist), FieldSpecSource.Empty);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 

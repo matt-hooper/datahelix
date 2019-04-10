@@ -18,7 +18,6 @@ class SetRestrictionsTests {
         givenSecondInputBlacklist(1);
 
         expectOutputWhitelist(2, 3);
-        expectOutputBlacklist(); //empty
     }
 
     @Test
@@ -43,7 +42,6 @@ class SetRestrictionsTests {
         givenSecondInputBlacklist(7, 8);
 
         expectOutputWhitelist(1, 2, 3);
-        expectOutputBlacklist(); //empty
     }
 
     @Test
@@ -73,9 +71,18 @@ class SetRestrictionsTests {
 
     private MergeResult<SetRestrictions> getActualOutput() {
         if (actualOutput == null) {
-            actualOutput = SetRestrictionsMerger.merge(
-                new SetRestrictions(firstInputWhitelist, firstInputBlacklist),
-                new SetRestrictions(secondInputWhitelist, secondInputBlacklist));
+            MergeResult<SetRestrictions> whitelist = SetRestrictionsMerger.merge(
+                SetRestrictions.fromWhitelist(firstInputWhitelist),
+                SetRestrictions.fromWhitelist(secondInputWhitelist));
+            MergeResult<SetRestrictions> blacklist = SetRestrictionsMerger.merge(
+                SetRestrictions.fromBlacklist(firstInputBlacklist),
+                SetRestrictions.fromBlacklist(secondInputBlacklist));
+
+            if (!whitelist.successful || !blacklist.successful){
+                return new MergeResult<>();
+            }
+
+            actualOutput = SetRestrictionsMerger.merge(whitelist.restrictions, blacklist.restrictions);
         }
 
         return actualOutput;

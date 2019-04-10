@@ -21,7 +21,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public void isInSet(Field field, Set<Object> values) {
 
-        SetRestrictions candidateRestrictions = new SetRestrictions(values, null);
+        SetRestrictions candidateRestrictions = SetRestrictions.fromWhitelist(values);
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
@@ -36,7 +36,7 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
 
     public void mustNotBeInSet(Field field, Set<Object> values) {
 
-        SetRestrictions candidateRestrictions = new SetRestrictions(null, values);
+        SetRestrictions candidateRestrictions = SetRestrictions.fromBlacklist(values);
 
         SetRestrictionsMerger merger = new SetRestrictionsMerger();
         MergeResult<SetRestrictions> result = merger.merge(currentRestrictions, candidateRestrictions);
@@ -51,14 +51,6 @@ public class SetConstraintValidator implements ConstraintValidatorAlerts {
     private void logError(Field field, StandardValidationMessages message) {
         alerts.add(new ValidationAlert(
             Criticality.ERROR,
-            message,
-            validationType,
-            field));
-    }
-
-    private void logInformation(Field field, StandardValidationMessages message) {
-        alerts.add(new ValidationAlert(
-            Criticality.INFORMATION,
             message,
             validationType,
             field));

@@ -14,7 +14,7 @@ public class FieldSpecHelper {
             return getNullRequiredFieldSpec(fieldValue.getFieldSpecSource());
         }
         return FieldSpec.Empty
-            .withSetRestrictions(new SetRestrictions(new HashSet<>(Collections.singletonList(fieldValue.getValue())), null), fieldValue.getFieldSpecSource())
+            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton(fieldValue.getValue())), fieldValue.getFieldSpecSource())
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), fieldValue.getFieldSpecSource());
     }
 
