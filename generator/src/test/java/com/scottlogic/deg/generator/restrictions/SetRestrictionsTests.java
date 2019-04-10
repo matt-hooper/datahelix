@@ -73,7 +73,7 @@ class SetRestrictionsTests {
 
     private MergeResult<SetRestrictions> getActualOutput() {
         if (actualOutput == null) {
-            actualOutput = SetRestrictions.merge(
+            actualOutput = SetRestrictionsMerger.merge(
                 new SetRestrictions(firstInputWhitelist, firstInputBlacklist),
                 new SetRestrictions(secondInputWhitelist, secondInputBlacklist));
         }

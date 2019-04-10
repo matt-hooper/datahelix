@@ -12,7 +12,7 @@ import java.util.Objects;
  * https://github.com/ScottLogic/datahelix/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/util/RegexProcessor.java
  * https://github.com/ScottLogic/datahelix/blob/ws/experimental-data-constraint-solver/data-constraint-poc/src/main/java/com/scottlogic/deg/constrainer/RegexFieldConstraint.java#L133
  */
-public class StringRestrictions {
+public class StringRestrictions implements Matchable<String> {
     private final StringConstraintsCollection constraints;
     public StringGenerator stringGenerator;
 
@@ -29,14 +29,8 @@ public class StringRestrictions {
         return o instanceof String;
     }
 
-    public boolean match(Object o) {
-        if (!StringRestrictions.isString(o)) {
-            return false;
-        }
-
-        String s = (String) o;
+    public boolean match(String s) {
         return stringGenerator.match(s);
-
     }
 
     @Override

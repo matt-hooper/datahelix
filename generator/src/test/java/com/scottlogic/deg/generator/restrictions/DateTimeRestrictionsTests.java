@@ -78,17 +78,6 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenSomethingThatIsntADateTime(){
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-
-        boolean result = restrictions.match(123);
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
     public void matchShouldReturnTrueIfMinAndMaxAreNull(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
 
