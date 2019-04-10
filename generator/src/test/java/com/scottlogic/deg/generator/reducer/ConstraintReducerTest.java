@@ -790,21 +790,6 @@ class ConstraintReducerTest {
     }
 
     @Test
-    void shouldNotReduceMultipleFormatConstraint() {
-        final Field field = new Field("test0");
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-
-        List<AtomicConstraint> constraints = Arrays.asList(
-            new FormatConstraint(field, "Lorem '$1'", rules()),
-            new FormatConstraint(field, "Ipsum '$1'", rules())
-        );
-
-        Assertions.assertThrows(
-            UnsupportedOperationException.class,
-            () -> constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints));
-    }
-
-    @Test
     void shouldReduceStringLongerThanConstraint() {
         final Field field = new Field("test0");
 
