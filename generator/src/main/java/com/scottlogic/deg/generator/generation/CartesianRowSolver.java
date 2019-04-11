@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.rows.ConcatenatingRowCombiner;
 import com.scottlogic.deg.generator.generation.rows.RowCombiner;
 import com.scottlogic.deg.generator.generation.rows.Row;
 import com.scottlogic.deg.generator.generation.rows.RowCombinerFactory;
@@ -40,8 +40,9 @@ public class CartesianRowSolver implements RowSolver {
 
     private Stream<Row> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
         Stream<RowCombiner> rowCombinerStream = rowSpecs.map(rowCombinerFactory::createRowCombiner);
-
-        return new ConcatenatingRowCombiner(rowCombinerStream)
-            .generate(generationConfig);
+        return FlatMappingSpliterator.flatMap(
+            rowCombinerStream
+                .map(source -> source.generate(generationConfig)),
+            streamOfStreams -> streamOfStreams);
     }
 }
