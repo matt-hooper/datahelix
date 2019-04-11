@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.walker.RestartingRowSolver;
 import com.scottlogic.deg.generator.walker.ReductiveRowSolver;
 
@@ -17,7 +18,7 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
 
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser optimiser;
-    private final GenerationConfig generationConfig;
+    private final CombinationStrategy combinationStrategy;
 
     @Inject
     public DataGeneratorProvider(CartesianRowSolver cartesianRowSolver,
@@ -25,13 +26,13 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
                                  GenerationConfigSource configSource,
                                  TreePartitioner treePartitioner,
                                  DecisionTreeOptimiser optimiser,
-                                 GenerationConfig generationConfig){
+                                 CombinationStrategy combinationStrategy){
         this.cartesianRowSolver = cartesianRowSolver;
         this.reductiveRowSolver = reductiveRowSolver;
         this.configSource = configSource;
         this.treePartitioner = treePartitioner;
         this.optimiser = optimiser;
-        this.generationConfig = generationConfig;
+        this.combinationStrategy = combinationStrategy;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
     }
 
     private RowSolver decorateWithPartitioning(RowSolver underlying) {
-        return new PartitioningRowSolver(underlying, treePartitioner, optimiser, generationConfig);
+        return new PartitioningRowSolver(underlying, treePartitioner, optimiser, combinationStrategy);
     }
 
     private RowSolver decorateWithRestarting(RowSolver underlying) {

@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.ValueGenerator;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +14,12 @@ import java.util.stream.Stream;
 
 public class RowCombinerFactory {
     private final ValueGenerator valueGenerator;
+    private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public RowCombinerFactory(ValueGenerator valueGenerator) {
+    public RowCombinerFactory(ValueGenerator valueGenerator, CombinationStrategy combinationStrategy) {
         this.valueGenerator = valueGenerator;
+        this.combinationStrategy = combinationStrategy;
     }
 
     public RowCombiner createRowCombiner(RowSpec rowSpec){
@@ -31,7 +34,7 @@ public class RowCombinerFactory {
             );
         }
 
-        return new FieldCombiningRowCombiner(fieldFowSources);
+        return new FieldCombiningRowCombiner(fieldFowSources, combinationStrategy);
     }
 
     private Row toRow(Value value) {

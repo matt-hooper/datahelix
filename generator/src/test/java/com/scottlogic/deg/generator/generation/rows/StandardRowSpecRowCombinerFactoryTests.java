@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.ValueGenerator;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ class StandardRowSpecRowCombinerFactoryTests {
         ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator);
+        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator, mock(CombinationStrategy.class));
 
         RowCombiner result = factory.createRowCombiner(rowSpec);
 
@@ -44,7 +45,7 @@ class StandardRowSpecRowCombinerFactoryTests {
         ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator);
+        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator, mock(CombinationStrategy.class));
 
         factory.createRowCombiner(rowSpec);
 

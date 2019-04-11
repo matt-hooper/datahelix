@@ -25,26 +25,15 @@ public class GenerationConfig {
         return this.dataGenerationType;
     }
 
-    public CombinationStrategy getCombinationStrategy() {
-        if (this.walkerType == TreeWalkerType.REDUCTIVE){
-            return new ReductiveCombinationStrategy();
-        }
-
-        switch(this.combinationStrategy){
-            case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
-            case PINNING: return new PinningCombinationStrategy();
-            case MINIMAL: return new MinimalCombinationStrategy();
-            default:
-                throw new UnsupportedOperationException(
-                    "$Combination strategy {this.combinationStrategy} is unsupported.");
-        }
-    }
-
     public TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
     public Optional<Long> getMaxRows() { return maxRows; }
+
+    public CombinationStrategyType getCombinationStrategy() {
+        return combinationStrategy;
+    }
 
     public enum DataGenerationType {
         FULL_SEQUENTIAL(Constants.GenerationTypes.FULL_SEQUENTIAL),

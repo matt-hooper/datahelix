@@ -17,22 +17,21 @@ public class PartitioningRowSolver implements RowSolver {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final RowSolver innerGenerator;
-    private final GenerationConfig generationConfig;
+    private final CombinationStrategy combinationStrategy;
 
     public PartitioningRowSolver(
         RowSolver innerGenerator,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
-        GenerationConfig generationConfig) {
+        CombinationStrategy combinationStrategy) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.innerGenerator = innerGenerator;
-        this.generationConfig = generationConfig;
+        this.combinationStrategy = combinationStrategy;
     }
 
     @Override
-    public Stream<Row> generateRows(Profile profile, DecisionTree decisionTree) {
-        CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
+    public Stream<Row> generateRows(Profile profile, DecisionTree decisionTree) {;
 
         final Stream<Stream<Row>> partitionedRows =
             treePartitioner
@@ -40,7 +39,6 @@ public class PartitioningRowSolver implements RowSolver {
                 .map(this.treeOptimiser::optimiseTree)
                 .map(tree -> innerGenerator.generateRows(profile, tree));
 
-        return partitionCombiner
-            .permute(partitionedRows);
+        return combinationStrategy.permute(partitionedRows);
     }
 }
