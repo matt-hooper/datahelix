@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.rows.ConcatenatingRowSource;
-import com.scottlogic.deg.generator.generation.rows.RowSource;
+import com.scottlogic.deg.generator.generation.rows.ConcatenatingRowCombiner;
+import com.scottlogic.deg.generator.generation.rows.RowCombiner;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.RowSourceFactory;
+import com.scottlogic.deg.generator.generation.rows.RowCombinerFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;
@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 public class CartesianRowSolver implements RowSolver {
 
     private final DecisionTreeWalker treeWalker;
-    private final RowSourceFactory rowSourceFactory;
+    private final RowCombinerFactory rowCombinerFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public CartesianRowSolver(
         DecisionTreeWalker treeWalker,
-        RowSourceFactory rowSourceFactory,
+        RowCombinerFactory rowCombinerFactory,
         GenerationConfig generationConfig) {
         this.treeWalker = treeWalker;
-        this.rowSourceFactory = rowSourceFactory;
+        this.rowCombinerFactory = rowCombinerFactory;
         this.generationConfig = generationConfig;
     }
 
@@ -39,9 +39,9 @@ public class CartesianRowSolver implements RowSolver {
     }
 
     private Stream<Row> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
-        Stream<RowSource> rowSourceStream = rowSpecs.map(rowSourceFactory::createRowSource);
+        Stream<RowCombiner> rowCombinerStream = rowSpecs.map(rowCombinerFactory::createRowCombiner);
 
-        return new ConcatenatingRowSource(rowSourceStream)
+        return new ConcatenatingRowCombiner(rowCombinerStream)
             .generate(generationConfig);
     }
 }

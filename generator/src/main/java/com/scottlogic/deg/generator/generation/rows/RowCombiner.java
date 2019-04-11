@@ -4,6 +4,6 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-public interface RowSource {
+public interface RowCombiner {
     Stream<Row> generate(GenerationConfig generationConfig);
 }

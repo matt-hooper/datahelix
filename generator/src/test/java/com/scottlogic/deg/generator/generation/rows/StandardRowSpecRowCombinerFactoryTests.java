@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.*;
 
-class StandardRowSpecRowSourceFactoryTests {
+class StandardRowSpecRowCombinerFactoryTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
@@ -29,11 +29,11 @@ class StandardRowSpecRowSourceFactoryTests {
         ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        RowSourceFactory factory = new RowSourceFactory(valueGenerator);
+        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator);
 
-        RowSource result = factory.createRowSource(rowSpec);
+        RowCombiner result = factory.createRowCombiner(rowSpec);
 
-        Assert.assertThat(result, instanceOf(FieldCombiningRowSource.class));
+        Assert.assertThat(result, instanceOf(FieldCombiningRowCombiner.class));
     }
 
     @Test
@@ -44,9 +44,9 @@ class StandardRowSpecRowSourceFactoryTests {
         ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        RowSourceFactory factory = new RowSourceFactory(valueGenerator);
+        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator);
 
-        factory.createRowSource(rowSpec);
+        factory.createRowCombiner(rowSpec);
 
         verify(valueGenerator, times(1)).generate(field, fieldSpec);
     }

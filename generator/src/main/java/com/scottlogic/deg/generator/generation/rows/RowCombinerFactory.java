@@ -11,17 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static javax.swing.UIManager.put;
-
-public class RowSourceFactory {
+public class RowCombinerFactory {
     private final ValueGenerator valueGenerator;
 
     @Inject
-    public RowSourceFactory(ValueGenerator valueGenerator) {
+    public RowCombinerFactory(ValueGenerator valueGenerator) {
         this.valueGenerator = valueGenerator;
     }
 
-    public RowSource createRowSource(RowSpec rowSpec){
+    public RowCombiner createRowCombiner(RowSpec rowSpec){
         List<Stream<Row>> fieldFowSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
@@ -33,7 +31,7 @@ public class RowSourceFactory {
             );
         }
 
-        return new FieldCombiningRowSource(fieldFowSources);
+        return new FieldCombiningRowCombiner(fieldFowSources);
     }
 
     private Row toRow(Value value) {

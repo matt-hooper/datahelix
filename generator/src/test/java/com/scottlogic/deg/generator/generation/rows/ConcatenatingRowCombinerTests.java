@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
-class ConcatenatingRowSourceTests {
+class ConcatenatingRowCombinerTests {
     private static final GenerationConfig arbitraryGenerationConfig = new GenerationConfig(
         new TestGenerationConfigSource(
             GenerationConfig.DataGenerationType.INTERESTING,
@@ -29,14 +29,14 @@ class ConcatenatingRowSourceTests {
         Row row2 = RowBuilder.startBuilding().build();
         Row row3 = RowBuilder.startBuilding().build();
 
-        RowSource rowSource1 = new DummyRowSource(row1, row2);
-        RowSource rowSource2 = new DummyRowSource(row3);
+        RowCombiner rowCombiner1 = new DummyRowCombiner(row1, row2);
+        RowCombiner rowCombiner2 = new DummyRowCombiner(row3);
 
-        ConcatenatingRowSource objectUnderTest =
-            new ConcatenatingRowSource(
+        ConcatenatingRowCombiner objectUnderTest =
+            new ConcatenatingRowCombiner(
                 Stream.of(
-                    rowSource1,
-                    rowSource2));
+                    rowCombiner1,
+                    rowCombiner2));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -57,11 +57,11 @@ class ConcatenatingRowSourceTests {
         // ARRANGE
         Row row1 = RowBuilder.startBuilding().build();
 
-        RowSource rowSource1 = new DummyRowSource(row1);
+        RowCombiner rowCombiner1 = new DummyRowCombiner(row1);
 
-        ConcatenatingRowSource objectUnderTest =
-            new ConcatenatingRowSource(
-                Stream.of(rowSource1));
+        ConcatenatingRowCombiner objectUnderTest =
+            new ConcatenatingRowCombiner(
+                Stream.of(rowCombiner1));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -82,16 +82,16 @@ class ConcatenatingRowSourceTests {
         Row row2 = RowBuilder.startBuilding().build();
         Row row3 = RowBuilder.startBuilding().build();
 
-        RowSource rowSource1 = new DummyRowSource(row1, row2);
-        RowSource rowSource2 = new DummyRowSource();
-        RowSource rowSource3 = new DummyRowSource(row3);
+        RowCombiner rowCombiner1 = new DummyRowCombiner(row1, row2);
+        RowCombiner rowCombiner2 = new DummyRowCombiner();
+        RowCombiner rowCombiner3 = new DummyRowCombiner(row3);
 
-        ConcatenatingRowSource objectUnderTest =
-            new ConcatenatingRowSource(
+        ConcatenatingRowCombiner objectUnderTest =
+            new ConcatenatingRowCombiner(
                 Stream.of(
-                    rowSource1,
-                    rowSource2,
-                    rowSource3));
+                    rowCombiner1,
+                    rowCombiner2,
+                    rowCombiner3));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());
@@ -110,14 +110,14 @@ class ConcatenatingRowSourceTests {
     @Test
     void whenAllSourcesAreEmpty() {
         // ARRANGE
-        RowSource rowSource1 = new DummyRowSource();
-        RowSource rowSource2 = new DummyRowSource();
+        RowCombiner rowCombiner1 = new DummyRowCombiner();
+        RowCombiner rowCombiner2 = new DummyRowCombiner();
 
-        ConcatenatingRowSource objectUnderTest =
-            new ConcatenatingRowSource(
+        ConcatenatingRowCombiner objectUnderTest =
+            new ConcatenatingRowCombiner(
                 Stream.of(
-                    rowSource1,
-                    rowSource2));
+                    rowCombiner1,
+                    rowCombiner2));
 
         // ACT
         List<Row> output = objectUnderTest.generate(arbitraryGenerationConfig).collect(Collectors.toList());

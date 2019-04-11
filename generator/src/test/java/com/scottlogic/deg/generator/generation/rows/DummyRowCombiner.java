@@ -4,11 +4,11 @@ import com.scottlogic.deg.generator.generation.GenerationConfig;
 
 import java.util.stream.Stream;
 
-class DummyRowSource implements RowSource
+class DummyRowCombiner implements RowCombiner
 {
     private final Stream<Row> rows;
 
-    public DummyRowSource(Row... rows) {
+    public DummyRowCombiner(Row... rows) {
         this.rows = Stream.of(rows);
     }
 
