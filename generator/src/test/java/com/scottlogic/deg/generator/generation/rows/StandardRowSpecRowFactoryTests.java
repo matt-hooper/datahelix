@@ -17,25 +17,10 @@ import java.util.stream.Stream;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.*;
 
-class StandardRowSpecRowCombinerFactoryTests {
+class StandardRowSpecRowFactoryTests {
 
     private static final Field field = new Field("Field 1");
     private static final ProfileFields fields = new ProfileFields(Collections.singletonList(field));
-
-    @Test
-    void shouldCreateMultiplexingRowSourceForRowSpec() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-        Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
-        RowSpec rowSpec = new RowSpec(fields, map);
-        ValueGenerator valueGenerator = mock(ValueGenerator.class);
-        when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
-
-        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator, mock(CombinationStrategy.class));
-
-        RowCombiner result = factory.createRowCombiner(rowSpec);
-
-        Assert.assertThat(result, instanceOf(FieldCombiningRowCombiner.class));
-    }
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
@@ -45,9 +30,9 @@ class StandardRowSpecRowCombinerFactoryTests {
         ValueGenerator valueGenerator = mock(ValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new Value(field, "value")));
 
-        RowCombinerFactory factory = new RowCombinerFactory(valueGenerator, mock(CombinationStrategy.class));
+        RowFactory factory = new RowFactory(valueGenerator, mock(CombinationStrategy.class));
 
-        factory.createRowCombiner(rowSpec);
+        factory.createFromRowSpec(rowSpec);
 
         verify(valueGenerator, times(1)).generate(field, fieldSpec);
     }

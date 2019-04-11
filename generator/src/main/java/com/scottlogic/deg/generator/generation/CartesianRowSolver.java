@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.rows.RowCombiner;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.RowCombinerFactory;
+import com.scottlogic.deg.generator.generation.rows.RowFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -18,31 +18,26 @@ import java.util.stream.Stream;
 public class CartesianRowSolver implements RowSolver {
 
     private final DecisionTreeWalker treeWalker;
-    private final RowCombinerFactory rowCombinerFactory;
-    private final GenerationConfig generationConfig;
+    private final RowFactory rowFactory;
 
     @Inject
     public CartesianRowSolver(
         DecisionTreeWalker treeWalker,
-        RowCombinerFactory rowCombinerFactory,
-        GenerationConfig generationConfig) {
+        RowFactory rowFactory) {
         this.treeWalker = treeWalker;
-        this.rowCombinerFactory = rowCombinerFactory;
-        this.generationConfig = generationConfig;
+        this.rowFactory = rowFactory;
     }
 
     @Override
     public Stream<Row> generateRows(Profile profile, DecisionTree analysedProfile) {
         Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
 
-        return generateDataFromRowSpecs(rowSpecs);
+        return generateRows(rowSpecs);
     }
 
-    private Stream<Row> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
-        Stream<RowCombiner> rowCombinerStream = rowSpecs.map(rowCombinerFactory::createRowCombiner);
+    private Stream<Row> generateRows(Stream<RowSpec> rowSpecs) {
         return FlatMappingSpliterator.flatMap(
-            rowCombinerStream
-                .map(source -> source.generate(generationConfig)),
-            streamOfStreams -> streamOfStreams);
+            rowSpecs.map(rowFactory::createFromRowSpec),
+            Function.identity());
     }
 }

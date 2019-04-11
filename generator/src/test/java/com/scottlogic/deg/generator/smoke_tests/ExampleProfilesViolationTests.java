@@ -14,7 +14,7 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.generation.rows.Row;
-import com.scottlogic.deg.generator.generation.rows.RowCombinerFactory;
+import com.scottlogic.deg.generator.generation.rows.RowFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -110,15 +110,14 @@ class ExampleProfilesViolationTests {
                     ),
                     new RowSpecMerger(new FieldSpecMerger()));
 
-                RowCombinerFactory rowCombinerFactory = new RowCombinerFactory(
+                RowFactory rowFactory = new RowFactory(
                     new ValueGenerator(
                         config,
                         new StandardFieldValueSourceEvaluator(),
                         new JavaUtilRandomNumberGenerator()),
                     combinationStrategy);
 
-                CartesianRowSolver cartesianRowSolver = new CartesianRowSolver(cartesianProductDecisionTreeWalker,
-                    rowCombinerFactory, config);
+                CartesianRowSolver cartesianRowSolver = new CartesianRowSolver(cartesianProductDecisionTreeWalker, rowFactory);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(

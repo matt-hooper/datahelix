@@ -12,29 +12,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class RowCombinerFactory {
+public class RowFactory {
     private final ValueGenerator valueGenerator;
     private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public RowCombinerFactory(ValueGenerator valueGenerator, CombinationStrategy combinationStrategy) {
+    public RowFactory(ValueGenerator valueGenerator, CombinationStrategy combinationStrategy) {
         this.valueGenerator = valueGenerator;
         this.combinationStrategy = combinationStrategy;
     }
 
-    public RowCombiner createRowCombiner(RowSpec rowSpec){
-        List<Stream<Row>> fieldFowSources = new ArrayList<>();
+    public Stream<Row> createFromRowSpec(RowSpec rowSpec){
+        List<Stream<Row>> fieldRowSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
             FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-            fieldFowSources.add(
+            fieldRowSources.add(
                 valueGenerator.generate(field, fieldSpec)
                     .map(this::toRow)
             );
         }
-
-        return new FieldCombiningRowCombiner(fieldFowSources, combinationStrategy);
+        return combinationStrategy.permute(fieldRowSources.stream());
     }
 
     private Row toRow(Value value) {
