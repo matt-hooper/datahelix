@@ -71,7 +71,7 @@ public class BaseModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
-        bind(RowSolver.class).toProvider(DataGeneratorProvider.class);
+        bind(RowGenerator.class).toProvider(DataGeneratorProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
 
         // Bind known implementations - no user input required

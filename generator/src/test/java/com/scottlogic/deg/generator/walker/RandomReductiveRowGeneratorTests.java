@@ -19,10 +19,10 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
-class RandomReductiveRowSolverTests {
+class RandomReductiveRowGeneratorTests {
     private DecisionTree tree;
-    private RestartingRowSolver walker;
-    private ReductiveRowSolver underlyingWalker;
+    private RestartingRowGenerator walker;
+    private ReductiveRowGenerator underlyingWalker;
     Profile profile = mock(Profile.class);
 
     @BeforeEach
@@ -32,8 +32,8 @@ class RandomReductiveRowSolverTests {
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2"))),
             "test-tree");
 
-        underlyingWalker = mock(ReductiveRowSolver.class);
-        walker = new RestartingRowSolver(underlyingWalker);
+        underlyingWalker = mock(ReductiveRowGenerator.class);
+        walker = new RestartingRowGenerator(underlyingWalker);
     }
 
     /**

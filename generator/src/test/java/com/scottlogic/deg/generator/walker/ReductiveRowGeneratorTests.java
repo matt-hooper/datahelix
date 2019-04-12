@@ -32,11 +32,11 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-class ReductiveRowSolverTests {
+class ReductiveRowGeneratorTests {
     private TreeConstraintNode rootNode;
     private DecisionTree tree;
     private ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
-    private ReductiveRowSolver walker;
+    private ReductiveRowGenerator walker;
     private FixFieldStrategy fixFieldStrategy;
     private FixFieldStrategyFactory fixFieldStrategyFactory;
     private ValueGenerator valueGenerator;
@@ -60,7 +60,7 @@ class ReductiveRowSolverTests {
         when(fixFieldStrategyFactory.getFixedFieldStrategy(any(), any())).thenReturn(fixFieldStrategy);
 
 
-        walker = new ReductiveRowSolver(
+        walker = new ReductiveRowGenerator(
             new NoOpIterationVisualiser(),
             reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),

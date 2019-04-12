@@ -117,12 +117,12 @@ class ExampleProfilesViolationTests {
                         new JavaUtilRandomNumberGenerator()),
                     combinationStrategy);
 
-                CartesianRowSolver cartesianRowSolver = new CartesianRowSolver(cartesianProductDecisionTreeWalker, rowFactory);
+                CartesianRowGenerator cartesianRowGenerator = new CartesianRowGenerator(cartesianProductDecisionTreeWalker, rowFactory);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(
                     new PartitioningRowSolver(
-                        cartesianRowSolver,
+                        cartesianRowGenerator,
                         new RelatedFieldTreePartitioner(),
                         new MostProlificConstraintOptimiser(),
                         combinationStrategy),

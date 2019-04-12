@@ -6,6 +6,6 @@ import com.scottlogic.deg.generator.generation.rows.Row;
 
 import java.util.stream.Stream;
 
-public interface RowSolver {
+public interface RowGenerator {
     Stream<Row> generateRows(Profile profile, DecisionTree analysedProfile);
 }

@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.generation.RowSolver;
+import com.scottlogic.deg.generator.generation.RowGenerator;
 import com.scottlogic.deg.generator.generation.ValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.rows.Row;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ReductiveRowSolver implements RowSolver {
+public class ReductiveRowGenerator implements RowGenerator {
     private final ReductiveTreePruner treePruner;
     private final IterationVisualiser iterationVisualiser;
     private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
@@ -29,7 +29,7 @@ public class ReductiveRowSolver implements RowSolver {
     private final FixFieldStrategyFactory fixFieldStrategyFactory;
 
     @Inject
-    public ReductiveRowSolver(
+    public ReductiveRowGenerator(
         IterationVisualiser iterationVisualiser,
         ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,

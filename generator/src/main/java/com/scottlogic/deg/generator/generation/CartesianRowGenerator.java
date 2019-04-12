@@ -15,13 +15,13 @@ import java.util.stream.Stream;
 /**
  * Generates data by walking a tree to get RowSpecs, then creating data from the RowSpecs
  */
-public class CartesianRowSolver implements RowSolver {
+public class CartesianRowGenerator implements RowGenerator {
 
     private final DecisionTreeWalker treeWalker;
     private final RowFactory rowFactory;
 
     @Inject
-    public CartesianRowSolver(
+    public CartesianRowGenerator(
         DecisionTreeWalker treeWalker,
         RowFactory rowFactory) {
         this.treeWalker = treeWalker;

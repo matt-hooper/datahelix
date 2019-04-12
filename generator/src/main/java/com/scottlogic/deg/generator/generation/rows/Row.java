@@ -6,7 +6,6 @@ import java.util.*;
 
 
 public class Row {
-    public static final Row empty = new Row(new HashMap<>());
 
     private final Map<Field, Value> fieldToValue;
 
@@ -17,6 +16,8 @@ public class Row {
     public Map<Field, Value> getFieldToValue() {
         return fieldToValue;
     }
+
+    public static final Row empty = new Row(new HashMap<>());
 
     @Override
     public boolean equals(Object o) {

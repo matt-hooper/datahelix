@@ -13,14 +13,14 @@ import java.util.stream.Stream;
  * Splits a Tree into subtrees, Generates data for each tree
  * Combines the data for each tree returns a stream of fully generated data
  */
-public class PartitioningRowSolver implements RowSolver {
+public class PartitioningRowSolver implements RowGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
-    private final RowSolver innerGenerator;
+    private final RowGenerator innerGenerator;
     private final CombinationStrategy combinationStrategy;
 
     public PartitioningRowSolver(
-        RowSolver innerGenerator,
+        RowGenerator innerGenerator,
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         CombinationStrategy combinationStrategy) {

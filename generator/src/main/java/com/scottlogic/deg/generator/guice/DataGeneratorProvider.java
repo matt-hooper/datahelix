@@ -6,13 +6,13 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
-import com.scottlogic.deg.generator.walker.RestartingRowSolver;
-import com.scottlogic.deg.generator.walker.ReductiveRowSolver;
+import com.scottlogic.deg.generator.walker.RestartingRowGenerator;
+import com.scottlogic.deg.generator.walker.ReductiveRowGenerator;
 
-public class DataGeneratorProvider implements Provider<RowSolver> {
+public class DataGeneratorProvider implements Provider<RowGenerator> {
 
-    private final CartesianRowSolver cartesianRowSolver;
-    private final ReductiveRowSolver reductiveRowSolver;
+    private final CartesianRowGenerator cartesianRowGenerator;
+    private final ReductiveRowGenerator reductiveRowGenerator;
 
     private final GenerationConfigSource configSource;
 
@@ -21,14 +21,14 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
     private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public DataGeneratorProvider(CartesianRowSolver cartesianRowSolver,
-                                 ReductiveRowSolver reductiveRowSolver,
+    public DataGeneratorProvider(CartesianRowGenerator cartesianRowGenerator,
+                                 ReductiveRowGenerator reductiveRowGenerator,
                                  GenerationConfigSource configSource,
                                  TreePartitioner treePartitioner,
                                  DecisionTreeOptimiser optimiser,
                                  CombinationStrategy combinationStrategy){
-        this.cartesianRowSolver = cartesianRowSolver;
-        this.reductiveRowSolver = reductiveRowSolver;
+        this.cartesianRowGenerator = cartesianRowGenerator;
+        this.reductiveRowGenerator = reductiveRowGenerator;
         this.configSource = configSource;
         this.treePartitioner = treePartitioner;
         this.optimiser = optimiser;
@@ -36,13 +36,13 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
     }
 
     @Override
-    public RowSolver get() {
+    public RowGenerator get() {
         boolean isReductive = configSource.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE;
         boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
 
-        RowSolver generator = isReductive
-            ? reductiveRowSolver
-            : cartesianRowSolver;
+        RowGenerator generator = isReductive
+            ? reductiveRowGenerator
+            : cartesianRowGenerator;
 
         if (configSource.shouldDoPartitioning()) {
             generator = decorateWithPartitioning(generator);
@@ -56,11 +56,11 @@ public class DataGeneratorProvider implements Provider<RowSolver> {
         return generator;
     }
 
-    private RowSolver decorateWithPartitioning(RowSolver underlying) {
+    private RowGenerator decorateWithPartitioning(RowGenerator underlying) {
         return new PartitioningRowSolver(underlying, treePartitioner, optimiser, combinationStrategy);
     }
 
-    private RowSolver decorateWithRestarting(RowSolver underlying) {
-        return new RestartingRowSolver(underlying);
+    private RowGenerator decorateWithRestarting(RowGenerator underlying) {
+        return new RestartingRowGenerator(underlying);
     }
 }
