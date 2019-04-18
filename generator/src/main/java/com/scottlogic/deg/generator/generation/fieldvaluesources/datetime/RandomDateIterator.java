@@ -26,12 +26,18 @@ class RandomDateIterator implements Iterator<OffsetDateTime> {
 
     @Override
     public OffsetDateTime next() {
-        long min = this.minDate.toInstant().toEpochMilli();
-        long max = this.maxDate.toInstant().toEpochMilli() - 1;
+        long min = getMilli(minDate);
+        long max = getMilli(maxDate) - 1;
 
         long generatedLong = (long) random.nextDouble(min, max);
 
-        return trimUnwantedGranularity(Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime(), granularity);
+        OffsetDateTime generatedDate = Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
+
+        return trimUnwantedGranularity(generatedDate, granularity);
+    }
+
+    private long getMilli(OffsetDateTime date) {
+        return date.toInstant().toEpochMilli();
     }
 
     private int nanoToMilli(int nano) {
@@ -40,31 +46,26 @@ class RandomDateIterator implements Iterator<OffsetDateTime> {
     }
 
     private OffsetDateTime trimUnwantedGranularity(OffsetDateTime dateToTrim, ChronoUnit granularity) {
-        return OffsetDateTime.of(trimUnwantedGranularity(dateToTrim.toLocalDateTime(), granularity), ZoneOffset.UTC);
-    }
-
-    private LocalDateTime trimUnwantedGranularity(LocalDateTime dateToTrim, ChronoUnit granularity) {
         switch (granularity) {
             case MILLIS:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), nanoToMilli(dateToTrim.getNano()));
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), nanoToMilli(dateToTrim.getNano()), ZoneOffset.UTC);
             case SECONDS:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), 0);
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), 0, ZoneOffset.UTC);
 
             case MINUTES:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute());
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), 0, 0, ZoneOffset.UTC);
 
             case HOURS:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), 0);
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), 0, 0, 0, ZoneOffset.UTC);
 
             case DAYS:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), dateToTrim.getDayOfMonth(), 0, 0);
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), 0, 0, 0, 0, ZoneOffset.UTC);
 
             case MONTHS:
-                return LocalDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth(), 1, 0, 0, 0, 0);
+                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
             case YEARS:
-                return LocalDateTime.of(dateToTrim.getYear(), Month.values()[1], 1, 0, 0, 0, 0);
-            //LocalDateTime of(int year, Month month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond)
+                return OffsetDateTime.of(dateToTrim.getYear(), 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
             default:
                 throw new IllegalStateException("Unimplemented granularity specified.");
