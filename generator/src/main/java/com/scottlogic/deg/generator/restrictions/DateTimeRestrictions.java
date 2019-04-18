@@ -1,39 +1,71 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
+
 public class DateTimeRestrictions {
+    private static final ChronoUnit DEFAULT_GRANULARITY = ChronoUnit.MILLIS;
+    private final ChronoUnit granularity;
     public DateTimeLimit min;
     public DateTimeLimit max;
 
-    public static boolean isDateTime(Object o){
+    public DateTimeRestrictions() {
+        this(DEFAULT_GRANULARITY);
+    }
+
+    public DateTimeRestrictions(final ChronoUnit granularity) {
+        this.granularity = granularity;
+    }
+
+    public ChronoUnit getGranularity() {
+        return granularity;
+    }
+
+    public static boolean isDateTime(Object o) {
         return o instanceof OffsetDateTime;
     }
 
     public boolean match(Object o) {
-        if(!DateTimeRestrictions.isDateTime(o)){
+        if (!DateTimeRestrictions.isDateTime(o)) {
             return false;
         }
 
         OffsetDateTime d = (OffsetDateTime) o;
 
-        if(min != null){
-            if(d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
-            {
+        if (min != null) {
+            if (d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1)) {
                 return false;
             }
         }
 
-        if(max != null){
-            if(d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1))
-            {
+        if (max != null) {
+            if (d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1)) {
                 return false;
             }
         }
 
-        return true;
+        return isCorrectGranularity(d);
     }
+
+    private boolean isCorrectGranularity(OffsetDateTime inputDate) {
+        long epochMillis = getEpochMillis(inputDate);
+        if (granularity == ChronoUnit.MONTHS || granularity == ChronoUnit.YEARS) {
+            // TODO: compare based on months or years
+            throw new RuntimeException("IMPLEMENT ME!");
+        } else {
+            long granularityMillis = granularity.getDuration().toMillis();
+            return epochMillis % granularityMillis == 0;
+        }
+    }
+
+    private long getEpochMillis(OffsetDateTime date) {
+        return date.toInstant().toEpochMilli();
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -87,8 +119,8 @@ public class DateTimeRestrictions {
             return minLimit.isAfter(maxLimit);
         }
 
-        private OffsetDateTime getReferenceTime(int nanoOffset){
-            if (inclusive){
+        private OffsetDateTime getReferenceTime(int nanoOffset) {
+            if (inclusive) {
                 return limit;
             }
 

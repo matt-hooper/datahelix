@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 class DateTimeRestrictionsTests {
     @Test
@@ -85,7 +88,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(123);
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -94,7 +97,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -104,7 +107,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MAX);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -114,7 +117,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -124,7 +127,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -134,7 +137,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MAX);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -144,7 +147,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -154,7 +157,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(OffsetDateTime.MAX);
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -165,7 +168,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(limit.minusSeconds(1));
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -176,7 +179,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(limit.plusSeconds(1));
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -189,7 +192,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min.plusMinutes(1));
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -201,7 +204,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
@@ -213,7 +216,7 @@ class DateTimeRestrictionsTests {
 
         boolean result = restrictions.match(min);
 
-        Assert.assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
@@ -332,6 +335,38 @@ class DateTimeRestrictionsTests {
         boolean result = other.isAfter(self);
 
         Assert.assertThat(result, is(true));
+    }
+
+    @Test
+    public void matchShouldReturnFalseIfGranularityIsCoarserThanResult() {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(ChronoUnit.MINUTES);
+        OffsetDateTime time = OffsetDateTime.of(2000, 01, 03, 04, 05, 06, 0, ZoneOffset.UTC);
+
+        assertFalse(restrictions.match(time));
+    }
+
+    @Test
+    public void matchShouldReturnTrueIfGranularityIsTheSameAsResult() {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(ChronoUnit.MINUTES);
+        OffsetDateTime time = OffsetDateTime.of(2000, 01, 03, 04, 05, 00, 0, ZoneOffset.UTC);
+
+        assertTrue(restrictions.match(time));
+    }
+
+    @Test
+    public void matchShouldReturnTrueIfGranularityIsTheSameAsResultMonths() {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(ChronoUnit.MONTHS);
+        OffsetDateTime time = OffsetDateTime.of(2000, 03, 01, 00, 00, 00, 0, ZoneOffset.UTC);
+
+        assertTrue(restrictions.match(time));
+    }
+
+    @Test
+    public void matchShouldReturnTrueIfGranularityIsTheSameAsResultYears() {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(ChronoUnit.YEARS);
+        OffsetDateTime time = OffsetDateTime.of(2005, 01, 01, 00, 00, 00, 0, ZoneOffset.UTC);
+
+        assertTrue(restrictions.match(time));
     }
 
     private DateTimeRestrictions restrictions(MockDateTimeLimit min, MockDateTimeLimit max){

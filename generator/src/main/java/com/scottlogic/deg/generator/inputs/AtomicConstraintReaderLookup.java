@@ -129,7 +129,7 @@ class AtomicConstraintReaderLookup {
 
         add(AtomicConstraintType.ISGRANULARTO.toString(),
                 (dto, fields, rules) ->
-                    new IsGranularToConstraint(
+                    new IsGranularToNumericConstraint(
                         fields.getByName(dto.field),
                         ParsedGranularity.parse(getValidatedValue(dto, Number.class)),
                         rules));
@@ -149,7 +149,7 @@ class AtomicConstraintReaderLookup {
                                 IsOfTypeConstraint.Types.NUMERIC,
                                 rules
                             ),
-                            new IsGranularToConstraint(
+                            new IsGranularToNumericConstraint(
                                 fields.getByName(dto.field),
                                 new ParsedGranularity(BigDecimal.ONE),
                                 rules

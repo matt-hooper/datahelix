@@ -9,12 +9,12 @@ import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 import java.util.Objects;
 import java.util.Set;
 
-public class IsGranularToConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsGranularToNumericConstraint implements AtomicConstraint, VisitableProfileElement {
     public final Field field;
     private final Set<RuleInformation> rules;
     public final ParsedGranularity granularity;
 
-    public IsGranularToConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
+    public IsGranularToNumericConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
         this.granularity = granularity;
         this.field = field;
         this.rules = rules;
@@ -37,7 +37,7 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsGranularToConstraint constraint = (IsGranularToConstraint) o;
+        IsGranularToNumericConstraint constraint = (IsGranularToNumericConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(granularity.getNumericGranularity(), constraint.granularity.getNumericGranularity());
     }
 
@@ -58,7 +58,7 @@ public class IsGranularToConstraint implements AtomicConstraint, VisitableProfil
 
     @Override
     public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGranularToConstraint(this.field, this.granularity, rules);
+        return new IsGranularToNumericConstraint(this.field, this.granularity, rules);
     }
 
     @Override
