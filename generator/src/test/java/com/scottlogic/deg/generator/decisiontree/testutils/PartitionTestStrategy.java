@@ -15,7 +15,7 @@ public class PartitionTestStrategy implements TreeTransformationTestStrategy {
 
     @Override
     public List<DecisionTree> transformTree(DecisionTree beforeTree) {
-        TreePartitioner treePartitioner = new RelatedFieldTreePartitioner();
+        TreePartitioner treePartitioner = new RelatedFieldTreePartitioner(null);
         return treePartitioner
                 .splitTreeIntoPartitions(beforeTree)
                 .collect(Collectors.toList());        

@@ -10,10 +10,12 @@ import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class TreePartitioningProvider implements Provider<TreePartitioner> {
     private final GenerationConfigSource configSource;
+    private final RelatedFieldTreePartitioner relatedFieldTreePartitioner;
 
     @Inject
-    public TreePartitioningProvider(GenerationConfigSource configSource) {
+    public TreePartitioningProvider(GenerationConfigSource configSource, RelatedFieldTreePartitioner relatedFieldTreePartitioner) {
         this.configSource = configSource;
+        this.relatedFieldTreePartitioner = relatedFieldTreePartitioner;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class TreePartitioningProvider implements Provider<TreePartitioner> {
         if (configSource.shouldDoPartitioning() && !isRandom){
             //if we partition with random each partition will have random values, but will be static in relation to
             //other partitions, therefore it looks like certain fields do not vary randomly
-            return new RelatedFieldTreePartitioner();
+            return relatedFieldTreePartitioner;
         }
         return new NoopTreePartitioner();
     }

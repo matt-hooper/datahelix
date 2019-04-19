@@ -119,8 +119,8 @@ class ExampleProfilesViolationTests {
                 StandardGenerationEngine engine = new StandardGenerationEngine(
                     new PartitioningDataGeneratorDecorator(
                         walkingDataGenerator,
-                        new RelatedFieldTreePartitioner(),
-                        new MostProlificConstraintOptimiser(), config),
+                        new RelatedFieldTreePartitioner(config),
+                        new MostProlificConstraintOptimiser()),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =

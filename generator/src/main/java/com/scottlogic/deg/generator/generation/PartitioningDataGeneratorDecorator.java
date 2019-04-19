@@ -17,30 +17,24 @@ public class PartitioningDataGeneratorDecorator implements DataGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final DataGenerator innerGenerator;
-    private final GenerationConfig generationConfig;
 
     public PartitioningDataGeneratorDecorator(
         DataGenerator innerGenerator,
         TreePartitioner treePartitioner,
-        DecisionTreeOptimiser optimiser,
-        GenerationConfig generationConfig) {
+        DecisionTreeOptimiser optimiser) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.innerGenerator = innerGenerator;
-        this.generationConfig = generationConfig;
     }
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree decisionTree) {
-        CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
-
         final Stream<Stream<GeneratedObject>> partitionedGeneratedObjects =
             treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
                 .map(this.treeOptimiser::optimiseTree)
                 .map(tree -> innerGenerator.generateData(profile, tree));
 
-        return partitionCombiner
-            .permute(partitionedGeneratedObjects);
+        return treePartitioner.combinePartitions(partitionedGeneratedObjects);
     }
 }

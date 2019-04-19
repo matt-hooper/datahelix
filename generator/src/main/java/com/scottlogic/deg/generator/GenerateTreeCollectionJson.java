@@ -63,7 +63,7 @@ public class GenerateTreeCollectionJson implements Runnable {
         final DecisionTree mergedTree = decisionTreeCollection.getMergedTree();
         
         TreePartitioner treePartitioner = doPartition
-                ? new RelatedFieldTreePartitioner()
+                ? new RelatedFieldTreePartitioner(null)
                 : new NoopTreePartitioner();
                 
         DecisionTreeOptimiser treeOptimiser = doOptimise

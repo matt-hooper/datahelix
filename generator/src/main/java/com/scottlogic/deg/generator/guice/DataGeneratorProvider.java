@@ -17,21 +17,18 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
 
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser optimiser;
-    private final GenerationConfig generationConfig;
 
     @Inject
     public DataGeneratorProvider(WalkingDataGenerator walkingDataGenerator,
                                  ReductiveDataGenerator reductiveDataGenerator,
                                  GenerationConfigSource configSource,
                                  TreePartitioner treePartitioner,
-                                 DecisionTreeOptimiser optimiser,
-                                 GenerationConfig generationConfig){
+                                 DecisionTreeOptimiser optimiser){
         this.walkingDataGenerator = walkingDataGenerator;
         this.reductiveDataGenerator = reductiveDataGenerator;
         this.configSource = configSource;
         this.treePartitioner = treePartitioner;
         this.optimiser = optimiser;
-        this.generationConfig = generationConfig;
     }
 
     @Override
@@ -56,7 +53,7 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
     }
 
     private DataGenerator decorateWithPartitioning(DataGenerator underlying) {
-        return new PartitioningDataGeneratorDecorator(underlying, treePartitioner, optimiser, generationConfig);
+        return new PartitioningDataGeneratorDecorator(underlying, treePartitioner, optimiser);
     }
 
     private DataGenerator decorateWithRestarting(DataGenerator underlying) {

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.ProfileFields;
@@ -7,6 +8,9 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 
 import java.util.*;
 import java.util.function.Function;
@@ -18,10 +22,13 @@ import java.util.stream.Stream;
  */
 public class RelatedFieldTreePartitioner implements TreePartitioner {
     private final ConstraintToFieldMapper fieldMapper;
+    private final GenerationConfig generationConfig;
     private static Integer partitionIndex = 0;
 
-    public RelatedFieldTreePartitioner() {
-        fieldMapper = new ConstraintToFieldMapper();
+    @Inject
+    public RelatedFieldTreePartitioner(GenerationConfig generationConfig) {
+        this.fieldMapper = new ConstraintToFieldMapper();
+        this.generationConfig = generationConfig;
     }
 
     public Stream<DecisionTree> splitTreeIntoPartitions(DecisionTree decisionTree) {
@@ -77,6 +84,12 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
                     "Tree with Unpartitioned Fields"
                 ))
             );
+    }
+
+    @Override
+    public Stream<GeneratedObject> combinePartitions(Stream<Stream<GeneratedObject>> partitionedStreams) {
+        CombinationStrategy partitionCombiner = generationConfig.getCombinationStrategy();
+        return partitionCombiner.permute(partitionedStreams);
     }
 
     class Partition {
