@@ -44,10 +44,10 @@ class DecisionTreeSimplifierTests {
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
 
-        final DecisionTree result = simplifier.simplify(tree);
+        final ConstraintNode result = simplifier.simplify(tree.rootNode);
 
-        Assert.assertEquals(result.rootNode.getAtomicConstraints(), tree.getRootNode().getAtomicConstraints());
-        Assert.assertTrue(result.rootNode.getDecisions().isEmpty());
+        Assert.assertEquals(result.getAtomicConstraints(), tree.getRootNode().getAtomicConstraints());
+        Assert.assertTrue(result.getDecisions().isEmpty());
     }
 
     @Test
@@ -81,7 +81,7 @@ class DecisionTreeSimplifierTests {
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
 
-        final DecisionTree result = simplifier.simplify(tree);
+        final ConstraintNode result = simplifier.simplify(tree.rootNode);
 
         final List<AtomicConstraint> expectedConstraints = Arrays.asList(
             new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{
@@ -94,7 +94,7 @@ class DecisionTreeSimplifierTests {
                 add("B");
             }}, null)
         );
-        Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
-        Assert.assertTrue(result.rootNode.getDecisions().isEmpty());
+        Assert.assertTrue(result.getAtomicConstraints().containsAll(expectedConstraints));
+        Assert.assertTrue(result.getDecisions().isEmpty());
     }
 }
