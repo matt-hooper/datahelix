@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -17,15 +18,18 @@ import java.util.stream.Stream;
  */
 public class WalkingDataGenerator implements DataGenerator {
 
+    private final PartitioningDoer partitioningDoer;
     private final DecisionTreeWalker treeWalker;
     private final DataBagSourceFactory dataBagSourceFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
+        PartitioningDoer partitioningDoer,
         DecisionTreeWalker treeWalker,
         DataBagSourceFactory dataBagSourceFactory,
         GenerationConfig generationConfig) {
+        this.partitioningDoer = partitioningDoer;
         this.treeWalker = treeWalker;
         this.dataBagSourceFactory = dataBagSourceFactory;
         this.generationConfig = generationConfig;
@@ -33,9 +37,11 @@ public class WalkingDataGenerator implements DataGenerator {
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile, DecisionTree analysedProfile) {
-        Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
+        return partitioningDoer.partitionThenGenerate(profile, analysedProfile, (p, t) -> {
+            Stream<RowSpec> rowSpecs = treeWalker.walk(analysedProfile);
 
-        return generateDataFromRowSpecs(rowSpecs);
+            return generateDataFromRowSpecs(rowSpecs);
+        });
     }
 
     private Stream<GeneratedObject> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
