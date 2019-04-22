@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,12 @@ import java.util.stream.Stream;
 
 public class DataBagSourceFactory {
     private final FieldSpecValueGenerator dataBagValueGenerator;
+    private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public DataBagSourceFactory(FieldSpecValueGenerator dataBagValueGenerator) {
+    public DataBagSourceFactory(FieldSpecValueGenerator dataBagValueGenerator, CombinationStrategy combinationStrategy) {
         this.dataBagValueGenerator = dataBagValueGenerator;
+        this.combinationStrategy = combinationStrategy;
     }
 
     public DataBagSource createDataBagSource(RowSpec rowSpec){
@@ -32,7 +35,7 @@ public class DataBagSourceFactory {
             );
         }
 
-        return new FieldCombiningDataBagSource(fieldDataBagSources);
+        return new FieldCombiningDataBagSource(fieldDataBagSources, combinationStrategy);
     }
 
     private GeneratedObject toGeneratedObject(DataBagValue dataBagValue) {

@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
 
-        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
+        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator, mock(CombinationStrategy.class));
 
         DataBagSource result = factory.createDataBagSource(rowSpec);
 
@@ -45,7 +46,7 @@ class StandardRowSpecGeneratedObjectSourceFactoryTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         when(valueGenerator.generate(any(), any())).thenReturn(Stream.of(new DataBagValue(field, "value")));
 
-        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator);
+        DataBagSourceFactory factory = new DataBagSourceFactory(valueGenerator, mock(CombinationStrategy.class));
 
         factory.createDataBagSource(rowSpec);
 

@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.walker.RestartingDataGeneratorDecorator;
 import com.scottlogic.deg.generator.walker.ReductiveDataGenerator;
 
@@ -17,7 +18,7 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
 
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser optimiser;
-    private final GenerationConfig generationConfig;
+    private final CombinationStrategy combinationStrategy;
 
     @Inject
     public DataGeneratorProvider(WalkingDataGenerator walkingDataGenerator,
@@ -25,13 +26,13 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
                                  GenerationConfigSource configSource,
                                  TreePartitioner treePartitioner,
                                  DecisionTreeOptimiser optimiser,
-                                 GenerationConfig generationConfig){
+                                 CombinationStrategy combinationStrategy){
         this.walkingDataGenerator = walkingDataGenerator;
         this.reductiveDataGenerator = reductiveDataGenerator;
         this.configSource = configSource;
         this.treePartitioner = treePartitioner;
         this.optimiser = optimiser;
-        this.generationConfig = generationConfig;
+        this.combinationStrategy = combinationStrategy;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
     }
 
     private DataGenerator decorateWithPartitioning(DataGenerator underlying) {
-        return new PartitioningDataGeneratorDecorator(underlying, treePartitioner, optimiser, generationConfig);
+        return new PartitioningDataGeneratorDecorator(underlying, treePartitioner, optimiser, combinationStrategy);
     }
 
     private DataGenerator decorateWithRestarting(DataGenerator underlying) {

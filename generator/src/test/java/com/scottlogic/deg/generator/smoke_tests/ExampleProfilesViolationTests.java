@@ -11,6 +11,8 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
+import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
@@ -42,6 +44,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
 
 class ExampleProfilesViolationTests {
+
+    CombinationStrategy combinationStrategy = new PinningCombinationStrategy();
 
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
@@ -110,7 +114,8 @@ class ExampleProfilesViolationTests {
                     new FieldSpecValueGenerator(
                         config,
                         new StandardFieldValueSourceEvaluator(),
-                        new JavaUtilRandomNumberGenerator()));
+                        new JavaUtilRandomNumberGenerator()),
+                    combinationStrategy);
 
                 WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
                     dataBagSourceFactory, config);
@@ -120,7 +125,7 @@ class ExampleProfilesViolationTests {
                     new PartitioningDataGeneratorDecorator(
                         walkingDataGenerator,
                         new RelatedFieldTreePartitioner(),
-                        new MostProlificConstraintOptimiser(), config),
+                        new MostProlificConstraintOptimiser(), combinationStrategy),
                     new ProfileDecisionTreeFactory(),
                     new NoopDataGeneratorMonitor());
                 ViolationGenerationEngine violationGenerationEngine =
