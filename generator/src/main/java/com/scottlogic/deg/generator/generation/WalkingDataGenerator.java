@@ -5,11 +5,11 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
-import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 public class WalkingDataGenerator implements DataGenerator {
 
     private final DecisionTreeWalker treeWalker;
-    private final DataBagSourceFactory dataBagSourceFactory;
+    private final GeneratedObjectFactory generatedObjectFactory;
     private final GenerationConfig generationConfig;
 
     @Inject
     public WalkingDataGenerator(
         DecisionTreeWalker treeWalker,
-        DataBagSourceFactory dataBagSourceFactory,
+        GeneratedObjectFactory generatedObjectFactory,
         GenerationConfig generationConfig) {
         this.treeWalker = treeWalker;
-        this.dataBagSourceFactory = dataBagSourceFactory;
+        this.generatedObjectFactory = generatedObjectFactory;
         this.generationConfig = generationConfig;
     }
 
@@ -39,11 +39,8 @@ public class WalkingDataGenerator implements DataGenerator {
     }
 
     private Stream<GeneratedObject> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
-        Stream<DataBagSource> dataBagSources = rowSpecs.map(dataBagSourceFactory::createDataBagSource);
-
         return FlatMappingSpliterator.flatMap(
-            dataBagSources
-                .map(source -> source.generate(generationConfig)),
-            streamOfStreams -> streamOfStreams);
+            rowSpecs.map(generatedObjectFactory::createFromRowSpec),
+            Function.identity());
     }
 }

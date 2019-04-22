@@ -14,7 +14,7 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
-import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.databags.GeneratedObjectFactory;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -110,7 +110,7 @@ class ExampleProfilesViolationTests {
                     ),
                     new RowSpecMerger(new FieldSpecMerger()));
 
-                DataBagSourceFactory dataBagSourceFactory = new DataBagSourceFactory(
+                GeneratedObjectFactory generatedObjectFactory = new GeneratedObjectFactory(
                     new FieldSpecValueGenerator(
                         config,
                         new StandardFieldValueSourceEvaluator(),
@@ -118,7 +118,7 @@ class ExampleProfilesViolationTests {
                     combinationStrategy);
 
                 WalkingDataGenerator walkingDataGenerator = new WalkingDataGenerator(cartesianProductDecisionTreeWalker,
-                    dataBagSourceFactory, config);
+                    generatedObjectFactory, config);
 
 
                 StandardGenerationEngine engine = new StandardGenerationEngine(

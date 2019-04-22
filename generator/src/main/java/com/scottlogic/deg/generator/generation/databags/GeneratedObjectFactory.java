@@ -13,17 +13,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class DataBagSourceFactory {
+public class GeneratedObjectFactory {
     private final FieldSpecValueGenerator dataBagValueGenerator;
     private final CombinationStrategy combinationStrategy;
 
     @Inject
-    public DataBagSourceFactory(FieldSpecValueGenerator dataBagValueGenerator, CombinationStrategy combinationStrategy) {
+    public GeneratedObjectFactory(FieldSpecValueGenerator dataBagValueGenerator, CombinationStrategy combinationStrategy) {
         this.dataBagValueGenerator = dataBagValueGenerator;
         this.combinationStrategy = combinationStrategy;
     }
 
-    public DataBagSource createDataBagSource(RowSpec rowSpec){
+    public Stream<GeneratedObject> createFromRowSpec(RowSpec rowSpec){
         List<Stream<GeneratedObject>> fieldDataBagSources = new ArrayList<>();
 
         for (Field field: rowSpec.getFields()) {
@@ -35,7 +35,7 @@ public class DataBagSourceFactory {
             );
         }
 
-        return new FieldCombiningDataBagSource(fieldDataBagSources, combinationStrategy);
+        return combinationStrategy.permute(fieldDataBagSources.stream());
     }
 
     private GeneratedObject toGeneratedObject(DataBagValue dataBagValue) {
