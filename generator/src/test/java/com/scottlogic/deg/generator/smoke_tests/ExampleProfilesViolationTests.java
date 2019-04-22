@@ -19,6 +19,7 @@ import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraint
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.profilesolver.ProfileSolver;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
@@ -116,13 +117,8 @@ class ExampleProfilesViolationTests {
                     dataBagSourceFactory, config);
 
 
-                StandardGenerationEngine engine = new StandardGenerationEngine(
-                    new PartitioningDataGeneratorDecorator(
-                        walkingDataGenerator,
-                        new RelatedFieldTreePartitioner(config),
-                        new MostProlificConstraintOptimiser()),
-                    new ProfileDecisionTreeFactory(),
-                    new NoopDataGeneratorMonitor());
+                ProfileSolver profileSolver = new ProfileSolver(walkingDataGenerator, new ProfileDecisionTreeFactory(), new RelatedFieldTreePartitioner(config), new MostProlificConstraintOptimiser());
+                StandardGenerationEngine engine = new StandardGenerationEngine(new NoopDataGeneratorMonitor(), profileSolver);
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
                         new IndividualRuleProfileViolator(

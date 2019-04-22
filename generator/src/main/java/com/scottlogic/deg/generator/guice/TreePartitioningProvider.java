@@ -20,10 +20,7 @@ public class TreePartitioningProvider implements Provider<TreePartitioner> {
 
     @Override
     public TreePartitioner get() {
-        boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
-        if (configSource.shouldDoPartitioning() && !isRandom){
-            //if we partition with random each partition will have random values, but will be static in relation to
-            //other partitions, therefore it looks like certain fields do not vary randomly
+        if (configSource.shouldDoPartitioning()){
             return relatedFieldTreePartitioner;
         }
         return new NoopTreePartitioner();

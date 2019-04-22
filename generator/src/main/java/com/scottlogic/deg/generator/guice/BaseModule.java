@@ -71,6 +71,7 @@ public class BaseModule extends AbstractModule {
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
         bind(DataGenerator.class).toProvider(DataGeneratorProvider.class);
+        bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
@@ -84,7 +85,6 @@ public class BaseModule extends AbstractModule {
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
-        bind(TreePartitioner.class).to(RelatedFieldTreePartitioner.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);
