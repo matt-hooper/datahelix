@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.ConcatenatingDataBagSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagSource;
 import com.scottlogic.deg.generator.generation.databags.GeneratedObject;
 import com.scottlogic.deg.generator.generation.databags.DataBagSourceFactory;
@@ -41,7 +41,9 @@ public class WalkingDataGenerator implements DataGenerator {
     private Stream<GeneratedObject> generateDataFromRowSpecs(Stream<RowSpec> rowSpecs) {
         Stream<DataBagSource> dataBagSources = rowSpecs.map(dataBagSourceFactory::createDataBagSource);
 
-        return new ConcatenatingDataBagSource(dataBagSources)
-            .generate(generationConfig);
+        return FlatMappingSpliterator.flatMap(
+            dataBagSources
+                .map(source -> source.generate(generationConfig)),
+            streamOfStreams -> streamOfStreams);
     }
 }
