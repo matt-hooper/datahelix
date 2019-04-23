@@ -5,14 +5,15 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
+import java.util.function.Function;
 
 class RandomDateIterator implements Iterator<OffsetDateTime> {
     private final OffsetDateTime minDate;
     private final OffsetDateTime maxDate;
     private final RandomNumberGenerator random;
-    private final ChronoUnit granularity;
+    private final Timescale granularity;
 
-    RandomDateIterator(OffsetDateTime minDate, OffsetDateTime maxDate, RandomNumberGenerator randomNumberGenerator, ChronoUnit granularity) {
+    RandomDateIterator(OffsetDateTime minDate, OffsetDateTime maxDate, RandomNumberGenerator randomNumberGenerator, Timescale granularity) {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.random = randomNumberGenerator;
@@ -45,31 +46,7 @@ class RandomDateIterator implements Iterator<OffsetDateTime> {
         return (nano / factor) * 1_000;
     }
 
-    private OffsetDateTime trimUnwantedGranularity(OffsetDateTime dateToTrim, ChronoUnit granularity) {
-        switch (granularity) {
-            case MILLIS:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), nanoToMilli(dateToTrim.getNano()), ZoneOffset.UTC);
-            case SECONDS:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), dateToTrim.getSecond(), 0, ZoneOffset.UTC);
-
-            case MINUTES:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), dateToTrim.getMinute(), 0, 0, ZoneOffset.UTC);
-
-            case HOURS:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), dateToTrim.getHour(), 0, 0, 0, ZoneOffset.UTC);
-
-            case DAYS:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), dateToTrim.getDayOfMonth(), 0, 0, 0, 0, ZoneOffset.UTC);
-
-            case MONTHS:
-                return OffsetDateTime.of(dateToTrim.getYear(), dateToTrim.getMonth().getValue(), 1, 0, 0, 0, 0, ZoneOffset.UTC);
-
-            case YEARS:
-                return OffsetDateTime.of(dateToTrim.getYear(), 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-
-            default:
-                throw new IllegalStateException("Unimplemented granularity specified.");
-
-        }
+    private OffsetDateTime trimUnwantedGranularity(OffsetDateTime dateToTrim, Timescale granularity) {
+        return granularity.getGranularityFunction().apply(dateToTrim);
     }
 }

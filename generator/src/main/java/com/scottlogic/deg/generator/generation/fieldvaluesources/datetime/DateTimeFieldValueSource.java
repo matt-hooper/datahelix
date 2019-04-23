@@ -18,7 +18,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999, ZoneOffset.UTC);
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
-    private final ChronoUnit granularity;
+    private final Timescale granularity;
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
     private final OffsetDateTime inclusiveLower;
@@ -52,14 +52,14 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             Duration duration = Duration.between(inclusiveLower, exclusiveUpper);
             Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
 
-            if (granularity == ChronoUnit.MILLIS) return (duration.getNano() / 1000000) + 1;
+            if (granularity == Timescale.MILLIS) return (duration.getNano() / 1000000) + 1;
             // future work to add customisable datetime granularity #141
-            if (granularity == ChronoUnit.SECONDS) return duration.getSeconds() + 1;
-            if (granularity == ChronoUnit.MINUTES) return (duration.getSeconds() / 60) + 1;
-            if (granularity == ChronoUnit.HOURS) return (duration.getSeconds() / 360) + 1;
-            if (granularity == ChronoUnit.DAYS) return (period.getDays() + 1);
-            if (granularity == ChronoUnit.MONTHS) return (period.getMonths() + 1);
-            if (granularity == ChronoUnit.YEARS) return (period.getYears() + 1);
+            if (granularity == Timescale.SECONDS) return duration.getSeconds() + 1;
+            if (granularity == Timescale.MINUTES) return (duration.getSeconds() / 60) + 1;
+            if (granularity == Timescale.HOURS) return (duration.getSeconds() / 360) + 1;
+            if (granularity == Timescale.DAYS) return (period.getDays() + 1);
+            if (granularity == Timescale.MONTHS) return (period.getMonths() + 1);
+            if (granularity == Timescale.YEARS) return (period.getYears() + 1);
         }
 
         throw new IllegalStateException("Cannot get count of an infinite series");

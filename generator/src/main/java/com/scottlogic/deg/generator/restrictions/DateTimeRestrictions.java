@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -8,8 +10,8 @@ import java.util.Objects;
 import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class DateTimeRestrictions {
-    private static final ChronoUnit DEFAULT_GRANULARITY = ChronoUnit.MILLIS;
-    private final ChronoUnit granularity;
+    private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
+    private final Timescale granularity;
     public DateTimeLimit min;
     public DateTimeLimit max;
 
@@ -17,11 +19,11 @@ public class DateTimeRestrictions {
         this(DEFAULT_GRANULARITY);
     }
 
-    public DateTimeRestrictions(final ChronoUnit granularity) {
+    public DateTimeRestrictions(final Timescale granularity) {
         this.granularity = granularity;
     }
 
-    public ChronoUnit getGranularity() {
+    public Timescale getGranularity() {
         return granularity;
     }
 
@@ -52,18 +54,9 @@ public class DateTimeRestrictions {
     }
 
     private boolean isCorrectGranularity(OffsetDateTime inputDate) {
-        long epochMillis = getEpochMillis(inputDate);
-        if (granularity == ChronoUnit.MONTHS || granularity == ChronoUnit.YEARS) {
-            // TODO: compare based on months or years
-            throw new RuntimeException("IMPLEMENT ME!");
-        } else {
-            long granularityMillis = granularity.getDuration().toMillis();
-            return epochMillis % granularityMillis == 0;
-        }
-    }
+        OffsetDateTime granularDate = granularity.getGranularityFunction().apply(inputDate);
 
-    private long getEpochMillis(OffsetDateTime date) {
-        return date.toInstant().toEpochMilli();
+        return inputDate.equals(granularDate);
     }
 
 
