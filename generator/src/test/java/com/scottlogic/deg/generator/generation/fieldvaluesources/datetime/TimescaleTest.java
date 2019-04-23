@@ -17,7 +17,7 @@ class TimescaleTest {
     public void millisGranularity() {
         OffsetDateTime imprecise = OffsetDateTime.of(2001, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        Timescale.MILLIS.getGranularityFunction().apply(imprecise)
+        Timescale.MILLIS.getGranularityFunction().apply(imprecise);
     }
 
 }
