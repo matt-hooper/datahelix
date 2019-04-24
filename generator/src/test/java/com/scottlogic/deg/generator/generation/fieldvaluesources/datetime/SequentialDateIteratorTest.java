@@ -4,8 +4,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+
 
 class SequentialDateIteratorTest {
 
@@ -60,7 +62,7 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.YEARS);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(),referenceDate);
     }
 
     @Test
@@ -70,7 +72,7 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MONTHS);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
 
     }
 
@@ -80,7 +82,7 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.DAYS);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
     }
 
     @Test
@@ -89,7 +91,7 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.HOURS);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
     }
 
     @Test
@@ -98,7 +100,7 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MINUTES);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
     }
 
     @Test
@@ -107,6 +109,6 @@ class SequentialDateIteratorTest {
 
         SequentialDateIterator sequentialDateIterator = new SequentialDateIterator(inclusiveMinDate, exclusiveMaxDate, Timescale.MILLIS);
 
-        Assert.assertTrue(sequentialDateIterator.next().equals(referenceDate));
+        Assert.assertEquals(sequentialDateIterator.next(), referenceDate);
     }
 }
