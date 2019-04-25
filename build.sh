@@ -7,9 +7,5 @@ mvn -B -DdryRun=true -DreleaseVersion=$1 -DdevelopmentVersion=$1-SNAPSHOT -Dauto
 SRC=datahelix-src-$1
 cd ..
 ROOT=datahelix
-ZIP=${SRC}.zip
 TAR=${SRC}.tar.gz
-touch ${ZIP}
-touch ${TAR}
-gzip -r ${ZIP} ${ROOT}
-tar -czf ${TAR} ${ROOT}
+tar -zcf ${TAR} ${ROOT}
