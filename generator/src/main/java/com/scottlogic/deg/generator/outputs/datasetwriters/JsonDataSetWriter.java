@@ -37,8 +37,15 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
 
         ObjectNode rowNode = writer.jsonObjectMapper.createObjectNode();
 
+        writeRowToJsonNode(row, writer.profileFields, rowNode);
+
+        writer.arrayNode.add(rowNode);
+    }
+
+    public static void writeRowToJsonNode(GeneratedObject row, ProfileFields profileFields, ObjectNode rowNode)
+    {
         Iterator<DataBagValue> dataBagIterator = row.values.iterator();
-        Iterator<Field> fieldNameIterator = writer.profileFields.iterator();
+        Iterator<Field> fieldNameIterator = profileFields.iterator();
 
         while(dataBagIterator.hasNext() && fieldNameIterator.hasNext()){
             String fieldName = fieldNameIterator.next().name;
@@ -58,8 +65,6 @@ public class JsonDataSetWriter implements DataSetWriter<JsonDataSetWriter.JsonWr
                 rowNode.put(fieldName, value.toString());
             }
         }
-
-        writer.arrayNode.add(rowNode);
     }
 
     public class JsonWriter implements Closeable {
