@@ -121,7 +121,9 @@ public class GenerationConfig {
 
     public enum OutputFormat {
         CSV(Constants.OutputFormats.CSV),
-        JSON(Constants.OutputFormats.JSON);
+        JSON(Constants.OutputFormats.JSON),
+        KAFKA(Constants.OutputFormats.KAFKA),
+        HBASE(Constants.OutputFormats.HBASE);
         private final String text;
 
         OutputFormat(String text){
@@ -168,6 +170,8 @@ public class GenerationConfig {
         public static class OutputFormats {
             public static final String CSV = "CSV";
             public static final String JSON = "JSON";
+            public static final String KAFKA = "KAFKA";
+            public static final String HBASE = "HBASE";
 
             public static final String DEFAULT = CSV;
         }
