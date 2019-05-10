@@ -10,10 +10,11 @@ import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
 import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagSourceFactory;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -35,8 +36,6 @@ import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
-import com.scottlogic.deg.generator.walker.routes.ExhaustiveProducer;
-import com.scottlogic.deg.generator.walker.routes.RowSpecRouteProducer;
 import com.scottlogic.deg.schemas.v0_1.ProfileSchemaValidator;
 
 import java.nio.file.Path;
@@ -70,16 +69,16 @@ public class BaseModule extends AbstractModule {
         bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
-        bind(RowSpecDataBagSourceFactory.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
+        bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
+        bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
-        bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
+        bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
-        bind(RowSpecRouteProducer.class).to(ExhaustiveProducer.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
